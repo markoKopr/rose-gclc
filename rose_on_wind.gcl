@@ -2,29 +2,51 @@ dim 200 200
 
 procedure draw_rose {pos_x pos_y scale petals wind}
 {
+expression start_x {pos_x + scale}
+expression start_y {pos_y}
+
+point A start_x start_y
 number it 0
 while {it < 6.28}
 {
-expression xt {pos_x+scale*cos(petals*it)*cos(wind+it)}
+expression r {cos(petals*it)}
 
-expression yt {pos_y+scale*cos(petals*it)*sin(wind+it)}
+expression theta_p {it + wind * abs(r) * sin(5 * it)}
 
-point A xt yt
+expression xt {pos_x + scale * r * cos(theta_p)}
+expression yt {pos_y + scale * r * sin(theta_p)}
 
-expression xt1 {xt + 0.05}
-expression yt1 {yt + 0.05}
-point B xt1 yt1
+point B xt yt
 
 drawsegment  A B
 
-expression it {it+0.001}
+getx xt1 B
+gety yt1 B
+point A xt1 yt1
+
+expression it {it+0.01}
 }
 }
 
 %wind
-point T 0 0 6.28 6.28
+point T 0 0 20 20
 getx t T
+expression wind_s {0.15 *sin(t)} 
 
-call draw_rose {100 100 20 8 t}
+% right roses
+call draw_rose {140 100 10 6 wind_s}
+call draw_rose {140 100 20 6 wind_s}
+
+call draw_rose {140 142 10 6 wind_s}
+call draw_rose {140 142 20 6 wind_s}
+
+%middle roses
+call draw_rose {95 100 10 8 wind_s}
+call draw_rose {95 100 20 8 wind_s}
+
+%left roses
+call draw_rose {50 100 10 4 wind_s}
+call draw_rose {50 100 20 4 wind_s}
 
 animation_frames 50 5
+
