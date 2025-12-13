@@ -1,0 +1,70 @@
+dim 200 200
+background 3 255 3
+
+procedure draw_rose {pos_x pos_y scale petals wind}
+{
+point C pos_x pos_y
+number it 0
+expression first {1}
+while {it < 6.28}
+{
+expression r {cos(petals*it)}
+
+number alpha 0.7
+
+expression bend {wind * r * cos(it - alpha)}
+expression theta_p {it + bend}
+
+expression xt {pos_x + scale * r * cos(theta_p)}
+expression yt {pos_y + scale * r * sin(theta_p)}
+
+point B xt yt
+
+ if_then_else {first == 0}
+{
+drawsegment A B
+
+filltriangle A B C
+}
+{
+}
+point A xt yt
+expression first {0}
+
+expression it {it+0.03}
+}
+}
+
+%wind
+point T 0 0 400 400
+getx t T
+expression wind_s {0.15 * (0.6*sin(0.5*t) + 0.4*sin(0.9*t + 1))}
+
+color 255 0 0
+% right-top rose
+call draw_rose {140 140 20 6 wind_s}
+color 150 200 0
+call draw_rose {140 140 10 6 wind_s}
+
+color 20 40 255
+
+% left-top rose
+call draw_rose {70 140 20 8 wind_s}
+color 165 40 45
+call draw_rose {70 140 10 8 wind_s}
+
+color 190 30 45
+% right-bottom rose
+call draw_rose {140 70 20 4 wind_s}
+color 255 255 0
+call draw_rose {140 70 10 4 wind_s}
+
+color 120 20 35
+% left-bottom rose
+call draw_rose {70 70 20 6 wind_s}
+color 235 195 85
+call draw_rose {70 70 10 6 wind_s}
+
+animation_frames 500 10
+
+
